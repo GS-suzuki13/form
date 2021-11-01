@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 const max = (new Date().getFullYear())
 
-export default Yup.object().shape({
+export default Yup.object({
     name: Yup.string()
         .min(2, 'Muito Curto!')
         .max(50, 'Muito Longo!')
@@ -23,6 +23,5 @@ export default Yup.object().shape({
 
     birthDate: Yup.date()
         .default(new Date(max))
-        .min('0001-01-01', 'Insira uma data de nascimento maior que 01/01/0001!')
         .max(max, 'Insira uma data de nascimento válida!'),
 });
