@@ -2,8 +2,8 @@ import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, Tabl
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import style from './App.css';
-import { InputField } from './page/form/InputField/InputField';
-import schema from './page/form/schema/schema';
+import { InputField } from './components/InputField/InputField';
+import schema from './components/schema/schema';
 
 const getInitialValues = () => {
   return {
@@ -20,19 +20,17 @@ function App() {
   const [form, setForm] = useState({ ...getInitialValues() })
   const [data, setData] = useState([]);
 
-    
   function onSubmit(values, { resetForm }) {
-    if (data.id) {
-      setData([...data, { ...values, id: count }]);
-      console.log('SUBMIT', values);
-      implementCount();
-      resetForm();
-    }
+    setData([...data, { ...values, id: count }]);
+    console.log('SUBMIT', values);
+    implementCount();
+    resetForm();
   }
 
   function clearTable() {
-    setData([]);
-
+    if (window.confirm('Deseja deletar toda a lista?')) {
+      setData([]);
+    }
   }
 
   function jsonHtml() {
@@ -58,17 +56,29 @@ function App() {
     return (years)
   }
 
+  function updateList(id, values) {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].id === id) {
+        console.log('CHANGE', data[i]);
+        return;
+      }
+    }
+  }
+
+  const Root = ()
+
+  const inList = (data.length > 0)
 
   const implementCount = () => {
     setCount(count + 1)
   }
 
-  const deleteDataItem = (idItem) => {
-    const filteredItens = data.filter(d => d.id !== idItem);
-    setData(filteredItens);
+  const deleteDataItem = (idItem, nameItem) => {
+    if (window.confirm(`Deseja deletar o(a) usuário(a) ${nameItem} ?`)) {
+      const filteredItens = data.filter(d => d.id !== idItem);
+      setData(filteredItens);
+    }
   }
-
-  var isValidList = (data.length > 0)
 
   return (
     <>
@@ -81,7 +91,7 @@ function App() {
           validationSchema={schema}
           validateOnMount
           initialValues={form}
-          render={({ isValid, setFieldValue, resetForm, isValidList }) => (
+          render={({ isValid, setFieldValue, resetForm }) => (
             <Stack spacing={15} direction='column'>
               <Form id='form'>
                 <label>Nome: *</label>
@@ -137,7 +147,7 @@ function App() {
                   <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{
                     <div className='ActionsButton'>
                       <Stack style={{ fontFamily: 'Homenaje, sans-serif', }} direction='row' spacing={0.5}>
-                        <Button style={{ fontFamily: 'Homenaje, sans-serif' }} color='primary' variant='contained'>Editar</Button>
+                        <Button style={{ fontFamily: 'Homenaje, sans-serif' }} color='primary' variant='contained' onClick={() => updateList(row.id)}>Editar</Button>
                         <Button style={{ fontFamily: 'Homenaje, sans-serif' }} color='error' variant='contained' onClick={() => deleteDataItem(row.id, row.name)}>Excluir</Button>
                       </Stack>
                     </div>
@@ -157,8 +167,8 @@ function App() {
             direction='row'
             spacing={0.5}
           >
-            <Button style={{ fontFamily: 'Homenaje, sans-serif' }} disabled={!isValidList} color='primary' variant='contained' onClick={jsonHtml}>EXPORTAR JSON</Button>
-            <Button style={{ fontFamily: 'Homenaje, sans-serif' }} disabled={!isValidList} color='error' variant='contained' onClick={clearTable}>EXCLUIR TABELA</Button>
+            <Button style={{ fontFamily: 'Homenaje, sans-serif' }} color='primary' variant='contained' onClick={jsonHtml} disabled={!inList}>EXPORTAR JSON</Button>
+            <Button style={{ fontFamily: 'Homenaje, sans-serif' }} color='error' variant='contained' onClick={clearTable} disabled={!inList}>EXCLUIR TABELA</Button>
           </Stack>
         </div>
       </div>

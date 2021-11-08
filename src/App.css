@@ -52,18 +52,6 @@ header {
     font-family: 'Homenaje', sans-serif;
     color: rgba(255, 255, 255, 0.55);
 }
-/* 
-@keyframes luisinha {
-    50% {box-shadow: 0px 46px 97px rgba(140, 131, 191, 0.3),
-        0px 21.2672px 44.846px rgba(140, 131, 191, 0.222503),
-        0px 12.1686px 25.6599px rgba(140, 131, 191, 0.188034), 
-        0px 7.38625px 15.5754px rgba(140, 131, 191, 0.161984),
-        0px 4.45054px 9.38484px rgba(140, 131, 191, 0.138016),
-        0px 2.47835px 5.22609px rgba(140, 131, 191, 0.111966),
-        0px 1.06592px 2.2477px rgba(140, 131, 191, 0.0774974);
-     opacity: 1;
-    } 
-} */
 
 form#form {
     display: flex;
@@ -81,7 +69,7 @@ form#form {
     display: flex;
     flex-direction: column;
     max-width: 600px;
-    min-height: 650px;
+    min-height: 5px;
     background: linear-gradient(0deg, #1D1A22, #1D1A22);
 }
 
@@ -150,10 +138,4 @@ form#form {
     display: flex;
     justify-content: flex-end;
     max-width: 180px;
-}
-
-@media (max-width: 760px) {
-    .root {
-        max-width: 3vh;
-    }
 }

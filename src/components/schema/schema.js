@@ -20,10 +20,11 @@ export default Yup.object({
             'O campo numérico deve ter 2 dígitos após o decimal ou menos',
             (number) => /^\d+(\.\d{1,2})?$/.test(number),
         )
+        .max(3, 'Insira uma altura válida!')
         .required('Insira sua altura!'),
 
     birthDate: Yup.date()
-        .min('0001-01-01', 'Insira uma data acima de 01/01/0001')
+        .min('0001-01-01', 'Insira uma data acima de 01/01/1900')
         .max(max, 'Insira uma data de nascimento válida!')
         .required('Insira sua data de nascimento!'),
 });
