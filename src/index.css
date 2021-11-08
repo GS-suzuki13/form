@@ -1,5 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Homenaje&display=swap');
+
 body {
   width: 100%;
+  font-family: 'Homenaje', sans-serif;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+
+html {
+  background-color: rgb(40, 42, 54);
+  font-family: 'Homenaje', sans-serif !important;
 }
 
 code {

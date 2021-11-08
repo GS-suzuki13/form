@@ -6,7 +6,7 @@ export default Yup.object({
     name: Yup.string()
         .min(2, 'Muito Curto!')
         .max(50, 'Muito Longo!')
-        .required('Insira seu Nome!'),
+        .required('Insira seu nome!'),
 
     lastName: Yup.string()
         .min(2, 'Muito Curto!')
@@ -14,14 +14,16 @@ export default Yup.object({
         .required('Insira seu sobrenome!'),
 
     height: Yup.number()
-        .min(0.01, 'Insira uma altura válida')
+        .min(0.01, 'Insira uma altura válida!')
         .test(
             'maxDigitsAfterDecimal',
-            'o campo numérico deve ter 2 dígitos após o decimal ou menos',
+            'O campo numérico deve ter 2 dígitos após o decimal ou menos',
             (number) => /^\d+(\.\d{1,2})?$/.test(number),
-        ),
+        )
+        .required('Insira sua altura!'),
 
     birthDate: Yup.date()
-        .default(new Date(max))
-        .max(max, 'Insira uma data de nascimento válida!'),
+        .min('0001-01-01', 'Insira uma data acima de 01/01/0001')
+        .max(max, 'Insira uma data de nascimento válida!')
+        .required('Insira sua data de nascimento!'),
 });
