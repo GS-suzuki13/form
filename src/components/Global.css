@@ -1,19 +1,19 @@
-.App {
+.FormList {
     margin-left: -25px;
     padding: 24px;
 }
 
-.App label {
+.FormList label {
     margin-top: 15px;
 }
 
 .ActionsButton Button:hover,
-.App Button:hover,
+.FormList Button:hover,
 .Actions Button:hover {
     background-color: #8800ff;
 }
 
-.App Button {
+.FormList Button {
     margin-top: 15px;
     height: 30px;
     width: 200px;
@@ -45,7 +45,7 @@ header {
     font-size: 45px;
 }
 
-.App input {
+.FormList input {
     border-radius: 15px;
     padding: 8px;
     background-color: rgba(111, 111, 111, 0.200);

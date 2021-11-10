@@ -6,7 +6,7 @@ import {
 import style from './InputField.css';
 
 
-export function InputField({ id, name, label, placeholder, type = 'text', component = "input", dimensao = "col-12 mb-16" }) {
+export function InputField({ id, name, label, step, placeholder, type = 'text', component = "input", dimensao = "col-12 mb-16" }) {
   const { errors, touched } = useFormikContext();
 
   return (
@@ -19,6 +19,7 @@ export function InputField({ id, name, label, placeholder, type = 'text', compon
         type={type}
         placeholder={placeholder}
         component={component}
+        step={step}
         className={
           "form-control" +
           (errors[name] && touched[name] ? " is-invalid" : "")
