@@ -1,9 +1,10 @@
 import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { InputField } from '../../../InputField/InputField';
 import schema from '../../../schema/schema';
 import style from '../../../Global.css'
+import EditableRow from '../../../EditableRow/EditableRow';
 
 
 const getInitialValues = () => {
@@ -11,15 +12,40 @@ const getInitialValues = () => {
         id: 0,
         name: '',
         lastName: '',
-        height: 0,
+        height: '',
         birthDate: '',
     }
 }
 
+
+
 const PagesFormList = () => {
     const [count, setCount] = useState(1);
+    const [valeuId, setValueId] = useState(null);
     const [form, setForm] = useState({ ...getInitialValues() })
-    const [data, setData] = useState([]);
+    const [editFormData, setEditFormData] = useState([{
+        id: 0,
+        name: '',
+        lastName: '',
+        height: 0,
+        birthDate: '',
+    }]);
+    const [data, setData] = useState([
+        {
+            id: 1,
+            name: 'Gustavo',
+            lastName: 'Suzuki',
+            height: 1.74,
+            birthDate: '2001-09-18',
+        },
+        {
+            id: 2,
+            name: 'Gustavo',
+            lastName: 'Suzuki',
+            height: 1.74,
+            birthDate: '2001-09-18',
+        }
+    ]);
 
     function onSubmit(values, { resetForm }) {
         setData([...data, { ...values, id: count }]);
@@ -57,6 +83,57 @@ const PagesFormList = () => {
         return (years)
     }
 
+    const handleEditFormSubmit = (ev) => {
+        ev.preventDefault();
+    
+        const editData = {
+          id: valeuId,
+          name: editFormData.name,
+          lastName: editFormData.lastName,
+          height: editFormData.height,
+          birthDate: editFormData.birthDate,
+        };
+    
+        const newData = [...data];
+    
+        const index = data.findIndex((value) => value.id === valeuId)
+    
+        newData[index] = editData;
+    
+        setData(newData);
+        setValueId(null);
+      };
+
+    const handleEditFormChange = (ev) => {
+        ev.preventDefault();
+
+        const fieldName = ev.target.getAttribute('name');
+        const fieldValue = ev.target.value;
+
+        const newFormData = { ...editFormData };
+        newFormData[fieldName] = fieldValue;
+
+        setEditFormData(newFormData);
+    };
+
+    const handleEditClick = (ev, value) => {
+        ev.preventDefault();
+        setValueId(value.id);
+
+        const formValues = {
+            name: value.name,
+            lastName: value.lastName,
+            height: value.height,
+            birthDate: value.birthDate,
+        };
+
+        setEditFormData(formValues)
+    };
+
+    const handleCancelClick = () => {
+        setValueId(null);
+    };
+
     const inList = (data.length > 0)
 
     const implementCount = () => {
@@ -69,7 +146,7 @@ const PagesFormList = () => {
             setData(filteredItens);
         }
     }
-    
+
     return (
         <>
             <div className='FormList'>
@@ -81,7 +158,7 @@ const PagesFormList = () => {
                     validationSchema={schema}
                     validateOnMount
                     initialValues={form}
-                    render={({ isValid, setFieldValue, resetForm }) => (
+                    render={({ isValid, resetForm }) => (
                         <Stack spacing={15} direction='column'>
                             <Form id='form'>
                                 <label>Nome: *</label>
@@ -89,7 +166,7 @@ const PagesFormList = () => {
                                 <label>Sobrenome: *</label>
                                 <InputField id='lastName' name='lastName' type='text' placeholder='Insira aqui seu sobrenome' />
                                 <label>Altura: *</label>
-                                <InputField id='height' name='height' type='number' step={0.10} />
+                                <InputField id='height' name='height' type='number' step={0.10} placeholder='Insira aqui sua altura' />
                                 <label>Data de nascimento: *</label>
                                 <InputField id='birthDate' name='birthDate' type='date' />
                                 <Stack direction='column' spacing={0.5}>
@@ -101,7 +178,10 @@ const PagesFormList = () => {
                     )}
                 />
             </div>
-            <div className='Table'>
+            <form
+          onSubmit={handleEditFormSubmit}
+          className='FormListTable'
+        >
                 <TableContainer style={{
                     color: 'white',
                     backgroundColor: 'rgb(45, 43, 49)',
@@ -116,33 +196,42 @@ const PagesFormList = () => {
                                 <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }}>Nome</TableCell>
                                 <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>Sobrenome</TableCell>
                                 <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>Altura</TableCell>
-                                <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>Idade</TableCell>
                                 <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>Data De Nascimento</TableCell>
+                                <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>Idade</TableCell>
                                 <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='left'>Opções</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {data.map((row) => (
-                                <TableRow
-                                    key={row.name}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} component='th' scope='row'>
-                                        {row.name}
-                                    </TableCell>
-                                    <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{row.lastName}</TableCell>
-                                    <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{row.height}</TableCell>
-                                    <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{age(row.birthDate)}</TableCell>
-                                    <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{dateFormat(row.birthDate)}</TableCell>
-                                    <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{
-                                        <div className='ActionsButton'>
-                                            <Stack style={{ fontFamily: 'Homenaje, sans-serif', }} direction='row' spacing={0.5}>
-                                                <Button style={{ fontFamily: 'Homenaje, sans-serif' }} color='primary' variant='contained' href={'/edit/' + (row.id)}>Editar</Button>
-                                                <Button style={{ fontFamily: 'Homenaje, sans-serif' }} color='error' variant='contained' onClick={() => deleteDataItem(row.id, row.name)}>Excluir</Button>
-                                            </Stack>
-                                        </div>
-                                    }</TableCell>
-                                </TableRow>
+                                <Fragment>
+                                    {valeuId === row.id ? (
+                                        <EditableRow
+                                            editFormData={editFormData}
+                                            handleEditFormChange={handleEditFormChange}
+                                            handleCancelClick={handleCancelClick} />
+                                    ) : (
+                                        <TableRow
+                                            key={row.name}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        >
+                                            <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} component='th' scope='row'>
+                                                {row.name}
+                                            </TableCell>
+                                            <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{row.lastName}</TableCell>
+                                            <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{row.height}</TableCell>
+                                            <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{dateFormat(row.birthDate)}</TableCell>
+                                            <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{age(row.birthDate)}</TableCell>
+                                            <TableCell style={{ color: '#99989B', fontFamily: 'Homenaje, sans-serif', }} align='center'>{
+                                                <div className='ActionsButton'>
+                                                    <Stack style={{ fontFamily: 'Homenaje, sans-serif', }} direction='row' spacing={0.5}>
+                                                        <Button style={{ fontFamily: 'Homenaje, sans-serif' }} color='primary' variant='contained' onClick={(ev) => handleEditClick(ev, row)} >Editar</Button>
+                                                        <Button style={{ fontFamily: 'Homenaje, sans-serif' }} color='error' variant='contained' onClick={() => deleteDataItem(row.id, row.name)}>Excluir</Button>
+                                                    </Stack>
+                                                </div>
+                                            }</TableCell>
+                                        </TableRow>
+                                    )}
+                                </Fragment>
                             ))}
                         </TableBody>
                     </Table>
@@ -161,7 +250,7 @@ const PagesFormList = () => {
                         <Button style={{ fontFamily: 'Homenaje, sans-serif' }} color='error' variant='contained' onClick={clearTable} disabled={!inList}>EXCLUIR TABELA</Button>
                     </Stack>
                 </div>
-            </div>
+            </form>
         </>
     );
 }

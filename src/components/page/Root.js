@@ -4,7 +4,6 @@ import {
     Switch,
     Route
 } from "react-router-dom";
-import PagesEditList from "./List/Edit/EditList";
 import PagesFormList from "./List/Form/FormList";
 
 
@@ -14,7 +13,6 @@ const Root = () => {
         <Router>
             <Switch>
                 <Route path='/' component={PagesFormList} />
-                <Route path='/edit/:id' component={PagesEditList} />
             </Switch>
         </Router>
     );
